@@ -102,4 +102,9 @@ public class BarangService {
         barangList.add(barang);
         writeFile();
     }
+
+    public List<Barang> findByName(String name) {
+        List<Barang> result = barangList.stream().filter(barang -> barang.getNamaBarang().startsWith(name)).toList();
+        return result;
+    }
 }
