@@ -1,11 +1,13 @@
 package com.smk.cashier.service;
 
+import com.smk.cashier.dao.BarangDao;
 import com.smk.cashier.model.Barang;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -49,5 +51,35 @@ class BarangServiceTest {
         laptopGaming.setNamaBarang("LaptopGaming");
         laptopGaming.setHargaBarang(20);
         BarangService.getInstance().addBarang(laptopGaming);
+    }
+
+    @Test
+    @Order(4)
+    void saveBarangToDatabase(){
+        BarangDao barangDao = new BarangDao();
+        Barang laptop = new Barang();
+        laptop.setKodeBarang("B001");
+        laptop.setNamaBarang("Laptop");
+        laptop.setHargaBarang(10000000);
+        laptop.setDateCreated(new Date());
+        laptop.setLastModified(new Date());
+        barangDao.save(laptop);
+
+        Barang mouse = new Barang();
+        mouse.setKodeBarang("B002");
+        mouse.setNamaBarang("Mousey mouse");
+        mouse.setHargaBarang(120000);
+        mouse.setDateCreated(new Date());
+        mouse.setLastModified(new Date());
+        barangDao.save(mouse);
+
+
+        Barang laptopGaming = new Barang();
+        laptopGaming.setKodeBarang("l002");
+        laptopGaming.setNamaBarang("LaptopGaming");
+        laptopGaming.setHargaBarang(20);
+        laptopGaming.setDateCreated(new Date());
+        laptopGaming.setLastModified(new Date());
+        barangDao.save(laptopGaming);
     }
 }
