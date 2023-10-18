@@ -15,7 +15,28 @@ public class BarangDao implements Dao<Barang, Integer> {
 
     @Override
     public Optional<Barang> get(int id) {
-        return Optional.empty();
+        return connection.flatMap(conn ->{
+            Optional<Barang>barang = Optional.empty();
+            String sql =  "SELECT * from barang where barang_id =?";
+            try {
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ps.setInt(1,id);
+                ResultSet rs = ps.executeQuery();
+                if(rs.next()) {
+                    String kodeBarang = rs.getString("kode_barang");
+                    String namaBarang = rs.getString("nama_barang");
+                    int hargaBarang = rs.getInt("harga_baramg");
+                    Barang barangResult = new Barang();
+                    barangResult.setNamaBarang(kodeBarang);
+                    barangResult.setNamaBarang(namaBarang);
+                    barangResult.setHargaBarang(hargaBarang);
+                    barang = Optional.of(barangResult);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return barang;
+        });
     }
 
     @Override
@@ -26,7 +47,7 @@ public class BarangDao implements Dao<Barang, Integer> {
     @Override
     public Optional<Integer> save(Barang barang) {
         Barang nonNullBarang = Objects.requireNonNull(barang);
-        String sql = "INSERT INTO barang" + "(kode_barang, nama_barang, harga_barang, created_by, update_by, date_created, last_modified )" + "VALUES(?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO barang" + "(kode_barang, nama_barang, harga_barang, created_by, updated_by, date_created, last_modified )" + "VALUES(?,?,?,?,?,?,?)";
         return connection.flatMap(conn ->{
            Optional<Integer> generatedId = Optional.empty();
             try {
