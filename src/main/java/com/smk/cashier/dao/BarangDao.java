@@ -75,6 +75,29 @@ public class BarangDao implements Dao<Barang, Integer> {
 
     @Override
     public void update(Barang barang) {
+        Barang nonNullBarang= Objects.requireNonNull(barang);
+        String sql = "UPDATE barang " +
+                "SET " +
+                "harga_barang = ?," +
+                "nama_barang = ?," +
+                "last_modified = ?," +
+                "updated_by = ? " +
+                "WHERE " +
+                "kode_barang = ? ";
+        connection.ifPresent(conn ->{
+            try {
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ps.setInt(1,barang.getHargaBarang());
+                ps.setString(2,barang.getNamaBarang());
+                ps.setDate(3,new Date(new java.util.Date().getTime()));
+                ps.setString(4,"test");
+                ps.setString(5,barang.getKodeBarang());
+                int numberOfUpdateRows = ps.executeUpdate();
+                System.out.println("numberOfUpdateRows = " + numberOfUpdateRows);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
 
     }
 
