@@ -116,4 +116,25 @@ class BarangServiceTest {
             }
         });
     }
+
+    @Test
+    @Order(6)
+    void updateBarangByKodeBarang(){
+     BarangDao barangDao = new BarangDao();
+        Barang laptop = new Barang();
+        laptop.setKodeBarang("B001");
+        laptop.setNamaBarang("Laptop Updated");
+        laptop.setHargaBarang(60000000);
+        barangDao.update(laptop);
+
+        Optional<Barang> barang1 = barangDao.get(1);
+        barang1.ifPresent(new Consumer<Barang>() {
+            @Override
+            public void accept(Barang barang) {
+                assertEquals("Laptop Updated", barang.getNamaBarang());
+                assertEquals("B001", barang.getKodeBarang());
+                assertEquals(60000000, barang.getHargaBarang());
+            }
+        });
+    }
 }
