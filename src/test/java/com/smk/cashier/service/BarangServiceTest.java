@@ -137,4 +137,49 @@ class BarangServiceTest {
             }
         });
     }
+
+    @Test
+    @Order(7)
+    void  deleteBarang(){
+        BarangDao barangDao = new BarangDao();
+        Barang laptop = new Barang();
+        laptop.setKodeBarang("B001");
+        barangDao.delete(laptop);
+        Optional<Barang> barang1 = barangDao.get(1);
+        assertEquals(barang1.isPresent(),false);
+    }
+
+    @Test
+    @Order(8)
+    void searchBarang(){
+        BarangDao barangDao = new BarangDao();
+        Barang BluetoothKeyboard = new Barang();
+        BluetoothKeyboard.setNamaBarang("Bluetooth Keyboard");
+        BluetoothKeyboard.setKodeBarang("BL001");
+        BluetoothKeyboard.setHargaBarang(50000);
+        BluetoothKeyboard.setDateCreated(new Date());
+        BluetoothKeyboard.setLastModified(new Date());
+        barangDao.save(BluetoothKeyboard);
+       
+        Barang Bluetoothmouse = new Barang();
+        Bluetoothmouse.setNamaBarang("Bluetooth mouse");
+        Bluetoothmouse.setKodeBarang("BL002");
+        Bluetoothmouse.setHargaBarang(50000);
+        Bluetoothmouse.setDateCreated(new Date());
+        Bluetoothmouse.setLastModified(new Date());
+        barangDao.save(Bluetoothmouse);
+
+        Barang mechanicalKeyboard = new Barang();
+        mechanicalKeyboard.setNamaBarang("mechanical Keyboard");
+        mechanicalKeyboard.setKodeBarang("BL003");
+        mechanicalKeyboard.setHargaBarang(50000);
+        mechanicalKeyboard.setDateCreated(new Date());
+        mechanicalKeyboard.setLastModified(new Date());
+        barangDao.save(mechanicalKeyboard);
+
+        assertEquals(barangDao.search("mecha").size(),1);
+        assertEquals(barangDao.search("Key").size(),2);
+        assertEquals(barangDao.search("BL").size(),3);
+
+    }
 }
