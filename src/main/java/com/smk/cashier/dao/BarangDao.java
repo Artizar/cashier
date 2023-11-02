@@ -101,8 +101,49 @@ public class BarangDao implements Dao<Barang, Integer> {
 
     }
 
+
+
     @Override
     public void delete(Barang barang) {
+        Barang noNullBarang = Objects.requireNonNull(barang);
+        String sql = "DELETE FROM barang WHERE kode_barang = ?";
+        connection.ifPresent(conn -> {
+            try {
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ps.setString(1, barang.getKodeBarang());
+                int numberofDeleteRows = ps.executeUpdate();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
 
+    @Override
+    public Collection<Barang> search(String keyword) {
+        Collection<Barang> barangsList = new LinkedList<>();
+        String sql = "SELECT * FROM barang WHERE kode_barang LIKE CONCAT('%',?,'%') or "
+                + "nama_barang LIKE CONCAT('%',?,'%');";
+        connection.ifPresent(conn -> {
+            try {
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ps.setString(1, keyword);
+                ps.setString(2,keyword);
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()){
+                    String kodeBarang = rs.getString("kode_barang");
+                    String namaBarang = rs.getString("nama_barang");
+                    int hargaBarag = rs.getInt("harga_barang");
+                    Barang barangResult = new Barang();
+                    barangResult.setKodeBarang(kodeBarang);
+                    barangResult.setNamaBarang(namaBarang);
+                    barangResult.setHargaBarang(hargaBarag);
+
+                    barangsList.add(barangResult);
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        return barangsList;
     }
 }
