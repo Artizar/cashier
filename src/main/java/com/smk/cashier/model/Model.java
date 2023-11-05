@@ -9,6 +9,8 @@ public abstract class Model {
     protected String createdBy;
     protected String updateBy;
 
+    protected String user;
+
     public Date getDateCreated() {
         return dateCreated;
     }
@@ -39,5 +41,9 @@ public abstract class Model {
 
     public void setUpdateBy(String updateBy) {
         this.updateBy = updateBy;
+    }
+
+    public void user(String user){
+        this.user = user;
     }
 }
